@@ -41,9 +41,11 @@ class AuthController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|confirmed|min:6',
+            'password' => 'required|min:6| confirmed',
+            'name' => 'required|max:255',
+            'profile' => 'required|max:255',
+            'image' => 'required|max:255',
         ]);
     }
 
@@ -56,9 +58,40 @@ class AuthController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
+            'name' => $data['name'],
+            'profile' => $data['profile'],
+            'image' => $data['image'],
         ]);
+    }
+/*     /**
+     * Obtain the user information from Facebook.
+     *
+     * @return Response
+     */
+    public function handleProviderCallback()
+    {
+        $user = Input::get('email');
+        $auth = $this->findOrCreateUser($user);     
+    }
+
+    /**
+     * Return user if exists; create and return if doesn't
+     *
+     * @param $facebookUser
+     * @return User
+     */
+    private function findOrCreateUser($User)
+    {
+        $authUser = User::where('email', $user->email)->first();
+ 
+        if ($authUser){
+            return 0;
+        }
+        else
+        {
+            return 1;
+        }
     }
 }

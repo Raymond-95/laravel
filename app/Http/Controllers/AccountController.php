@@ -14,7 +14,7 @@ class AccountController extends Controller
     public function apiPostSignUp() {
 
         $rules = [
-            'email' => 'required | unique:email',
+            'email' => 'required | unique:users,email',
             'password' => 'required | min:6',
         ];
 
@@ -23,7 +23,6 @@ class AccountController extends Controller
         if ($validator->fails()) {
             return response()->api(['error' => 'validation failed', $validator]);
         } else {
-            return response()->api(['message' => 'Signup succsdsdsdsdessfully']);
             //To create the user account
             $newUser = new User;
             $newUser->email = trim(Input::get('email')); 
@@ -40,8 +39,7 @@ class AccountController extends Controller
 
     public function apiPostLogin() {
 
-
-        $field = Input::get('email');
+        $field = filter_var(Input::get('email'), FILTER_VALIDATE_EMAIL) ? 'email':
 
         $rules = array(
             $field => 'required|exists:users,'.$field,
@@ -53,36 +51,37 @@ class AccountController extends Controller
         ];
 
         $inputs = array(
-                $field      => Input::get('email'),
-                'password'  => Input::get('password'),
-            );
+            $field      => Input::get('email'),
+            'password'  => Input::get('password'),
+        );
 
-        if(Auth::attempt($inputs))
-        {
-            return response()
-                    ->api(compact('token'));
-        }
-        else
-            return response()
-                    ->api([], 'Unauthorized', 'Access is denied due to invalid credentials testing2.', 401)
-                ;
-        // try{
-        //     if(! $token = JWTAuth::attempt($inputs)) {
-        //         return response()
-        //             ->api([], 'Unauthorized', 'Access is denied due to invalid credentials testing.', 401)
-        //         ;
-
-        //     } else{
-        //      Auth::attempt($inputs);
-                 
-        //     }
-        //     // }
-
-        // } catch(JWTException $e) {
+        // if(Auth::attempt($inputs))
+        // {
         //     return response()
-        //         ->api([], 'Token Error', 'Could not create the token', 500)
-        //     ;
+        //             ->api(compact('token'));
         // }
+        // else
+        //     return response()
+        //             ->api([], 'Unauthorized', 'Access is denied due to invalid credentials testing2.', 401)
+        //         ;
+        try{
+            if(! $token = JWTAuth::attempt($inputs)) {
+                return response()
+                    ->api([], 'Unauthorized', 'Access is denied due to invalid credentials testing.', 401)
+                ;
+
+            } else{
+             Auth::attempt($inputs);
+                return response()
+                        ->api(compact('token')); 
+            }
+            // }
+
+        } catch(JWTException $e) {
+            return response()
+                ->api([], 'Token Error', 'Could not create the token', 500)
+            ;
+        }
     }
 
     public function apiPostLogout() {

@@ -15,29 +15,19 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-//Route::get('user', 'UsersController@getUser');
-
-Route::group(['middleware' => 'guest'], function() {
-	Route::group(['prefix' => 'accounts'],function(){
-		Route::post('signup','AccountController@apiPostSignUp');
-	});
-});
 
 Route::group(['prefix' => 'accounts'],function(){
-	Route::post('login','AccountController@apiPostLogin');
+    Route::post('signup','AccountController@apiPostSignUp');
+    Route::post('login','AccountController@apiPostLogin');
+     Route::post('logout', 'AccountController@apiPostLogout');
 });
 
 Route::group(['middleware' => 'jwt.auth'], function() {
 
-        Route::group(['prefix' => 'accounts'],function(){
-        	Route::post('authenticate', 'AuthController@authenticate');
-
-            
-            Route::post('logout', 'AccountController@apiPostLogout');
-            Route::get('me', 'AccountController@apiGetAccount');
-        }); // accounts
-
-        Route::group(['prefix' => 'users'], function(){    
-            Route::get('{id}', 'UserController@apiGetUser')->where('id', '[0-9]+');
-        }); // users
+    Route::group(['prefix' => 'accounts'],function(){
+        Route::get('me', 'AccountController@apiGetAccount');
+    }); // accounts
 }); // auth   
+
+
+

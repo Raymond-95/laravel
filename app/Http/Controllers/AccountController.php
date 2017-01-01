@@ -13,12 +13,17 @@ class AccountController extends Controller
 {
     public function apiPostSignUp() {
 
+        $inputs = array(
+            'email'      => Input::get('email'),
+            'password'  => Input::get('email')
+        );
+
         $rules = [
             'email' => 'required | unique:users,email',
             'password' => 'required | min:6',
         ];
 
-        $validator = Validator::make(Input::all(), $rules);
+        $validator = Validator::make($inputs, $rules);
 
         if ($validator->fails()) {
             return response()->api(['error' => 'validation failed', $validator]);
@@ -28,8 +33,8 @@ class AccountController extends Controller
             $newUser->email = trim(Input::get('email')); 
             $newUser->password = Hash::make(Input::get('email'));
             $newUser->name = trim(Input::get('name'));
-            $newUser->profile = trim(Input::get('profile'));
-            $newUser->image = trim(Input::get('image'));
+            $newUser->profileUrl = trim(Input::get('profileUrl'));
+            $newUser->imageUrl = trim(Input::get('imageUrl'));
             $newUser->save();
         }
         
@@ -52,18 +57,9 @@ class AccountController extends Controller
 
         $inputs = array(
             $field      => Input::get('email'),
-            'password'  => Input::get('password'),
+            'password'  => Input::get('email')
         );
 
-        // if(Auth::attempt($inputs))
-        // {
-        //     return response()
-        //             ->api(compact('token'));
-        // }
-        // else
-        //     return response()
-        //             ->api([], 'Unauthorized', 'Access is denied due to invalid credentials testing2.', 401)
-        //         ;
         try{
             if(! $token = JWTAuth::attempt($inputs)) {
                 return response()
@@ -101,8 +97,8 @@ class AccountController extends Controller
                     'id' => $user->id,
                     'email' => $user->email,
                     'name' => $user->name,
-                    'profile' => $user->profile,
-                    'image' => $user->image,
+                    'profileUrl' => $user->profileUrl,
+                    'imageUrl' => $user->imageUrl,
                     'token' => $t
                 ];
 

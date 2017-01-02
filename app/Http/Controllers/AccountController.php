@@ -87,11 +87,13 @@ class AccountController extends Controller
     }
 
     public function apiGetAccount() {
-        //$user = User::find(Auth::user()->id);
+       
         try {
-            if (! $user = JWTAuth::parseToken()->authenticate()) {
-               abort(404,"User not found");
-            } else {
+            // if (! $user = JWTAuth::parseToken()->authenticate()) {
+            //    abort(404,"User not found");
+             $user = User::find(Auth::user()->id);
+
+            // } else {
                 $t = JWTAuth::fromUser($user);
                 $data = [
                     'id' => $user->id,
@@ -103,7 +105,7 @@ class AccountController extends Controller
                 ];
 
                 return response()->api($data);
-            }
+            // }
         } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
                 abort(401,"The token has expired");
                 //return response()->json(['token_expired'], $e->getStatusCode());

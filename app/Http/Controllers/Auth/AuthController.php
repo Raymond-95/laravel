@@ -22,15 +22,15 @@ class AuthController extends Controller
 
     use AuthenticatesAndRegistersUsers;
 
-    /**
-     * Create a new authentication controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('guest', ['except' => 'getLogout']);
-    }
+    // /**
+    //  * Create a new authentication controller instance.
+    //  *
+    //  * @return void
+    //  */
+    // public function __construct()
+    // {
+    //     $this->middleware('guest', ['except' => 'getLogout']);
+    // }
 
     /**
      * Get a validator for an incoming registration request.
@@ -44,8 +44,8 @@ class AuthController extends Controller
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|min:6| confirmed',
             'name' => 'required|max:255',
-            'profile' => 'required|max:255',
-            'image' => 'required|max:255',
+            'profileUrl' => 'required|max:255',
+            'imageUrl' => 'required|max:255',
         ]);
     }
 
@@ -61,8 +61,8 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
             'name' => $data['name'],
-            'profile' => $data['profile'],
-            'image' => $data['image'],
+            'profileUrl' => $data['profileUrl'],
+            'imageUrl' => $data['imageUrl'],
         ]);
     }
 /*     /**

@@ -15,19 +15,19 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::group(['prefix' => 'api'], function() {
+	Route::group(['prefix' => 'accounts'],function(){
+	    Route::post('signup','AccountController@apiPostSignUp');
+	    Route::post('login','AccountController@apiPostLogin');
+	     Route::post('logout', 'AccountController@apiPostLogout');
+	});
 
-Route::group(['prefix' => 'accounts'],function(){
-    Route::post('signup','AccountController@apiPostSignUp');
-    Route::post('login','AccountController@apiPostLogin');
-     Route::post('logout', 'AccountController@apiPostLogout');
+	//Route::group(['middleware' => 'jwt.auth'], function() {
+
+	    Route::group(['prefix' => 'accounts'],function(){
+	        Route::get('me', 'AccountController@apiGetAccount');
+	    }); // accounts
+	//}); // auth   
 });
-
-Route::group(['middleware' => 'jwt.auth'], function() {
-
-    Route::group(['prefix' => 'accounts'],function(){
-        Route::get('me', 'AccountController@apiGetAccount');
-    }); // accounts
-}); // auth   
-
 
 

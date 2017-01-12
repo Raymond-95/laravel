@@ -22,12 +22,17 @@ Route::group(['prefix' => 'api'], function() {
 	     Route::post('logout', 'AccountController@apiPostLogout');
 	});
 
-	//Route::group(['middleware' => 'jwt.auth'], function() {
+//Route::group(['middleware' => 'jwt.auth'], function() {
 
-	    Route::group(['prefix' => 'accounts'],function(){
-	        Route::get('me', 'AccountController@apiGetAccount');
-	    }); // accounts
-	//}); // auth   
+    Route::group(['prefix' => 'accounts'],function(){
+        Route::get('me', 'AccountController@apiGetAccount');
+    }); // accounts
+//}); // auth   
+
+    Route::group(['prefix' => 'trip'],function(){
+        Route::post('register_trip', 'TripsController@store');
+        Route::get('all', 'TripsController@show');
+    });
 });
 
 

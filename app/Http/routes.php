@@ -26,12 +26,14 @@ Route::group(['prefix' => 'api'], function() {
 
     Route::group(['prefix' => 'accounts'],function(){
         Route::get('me', 'AccountController@apiGetAccount');
+        Route::post('get_user', 'AccountController@apiGetUser');
     }); // accounts
 //}); // auth   
 
     Route::group(['prefix' => 'trip'],function(){
         Route::post('register_trip', 'TripsController@store');
-        Route::get('get_driver', 'TripsController@getDriveTrip');
+        Route::get('get_drive_trips', 'TripsController@getDriveTrips');
+        Route::post('get_driver', 'TripsController@getDriver');
     });
 });
 

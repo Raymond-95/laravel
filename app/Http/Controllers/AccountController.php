@@ -120,4 +120,19 @@ class AccountController extends Controller
 
             }
     }
+
+    public function apiGetUser(Request $request){
+
+        $user = User::find($request->id);
+
+        $data = [
+                    'id' => $user->id,
+                    'email' => $user->email,
+                    'name' => $user->name,
+                    'profileUrl' => $user->profileUrl,
+                    'imageUrl' => $user->imageUrl
+                ];
+
+        return response()->api($data);
+    }
 }

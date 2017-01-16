@@ -65,7 +65,7 @@ class TripsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function getDriveTrip()
+    public function getDriveTrips()
     {
         $where = ['status' => 'available', 'role' => 'driver'];
         $trips = Trip::where($where)->get();
@@ -82,10 +82,33 @@ class TripsController extends Controller
                 'time'  => $trip->time,
                 'information'  => $trip->information,
                 'role' => $trip->role,
+                'user_id' => $trip->user_id,
                 'name' => $trip->user->name,
                 'imageUrl' => $trip->user->imageUrl
             ];
         }
+
+        return response()
+            ->api($response);
+    }
+
+    public function getDriver(Request $request)
+    {
+        $trip = Trip::find($request->id);
+
+            $response = [
+
+                'source' => $trip->source,
+                'destination' => $trip->destination,
+                'date'  => $trip->date,
+                'time'  => $trip->time,
+                'information'  => $trip->information,
+                'role' => $trip->role,
+                'user_id' => $trip->user_id,
+                'name' => $trip->user->name,
+                'imageUrl' => $trip->user->imageUrl
+            ];
+        
 
         return response()
             ->api($response);

@@ -12,6 +12,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 {
     use Authenticatable, CanResetPassword;
 
+    public function trip()
+    {
+        return $this->hasMany(Trip::class);
+    }
+    
+
     /**
      * The database table used by the model.
      *

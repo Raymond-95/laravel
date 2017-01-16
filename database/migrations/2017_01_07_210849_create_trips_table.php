@@ -20,7 +20,10 @@ class CreateTripsTable extends Migration
             $table->time('time')->nullable();
             $table->string('information', 150)->default(null);
             $table->string('role')->default(null);
-            $table->string('user_id')->default(null);
+
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
             $table->timestamp('created_at')->nullableTimestamps();
             $table->timestamp('updated_at')->nullable();
             $table->string('requested_by')->default(null);

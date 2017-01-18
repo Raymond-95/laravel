@@ -27,6 +27,7 @@ Route::group(['prefix' => 'api'], function() {
     Route::group(['prefix' => 'accounts'],function(){
         Route::get('me', 'AccountController@apiGetAccount');
         Route::post('get_user', 'AccountController@apiGetUser');
+        Route::post('update_user', 'AccountController@apiUpdateUser');
     }); // accounts
 //}); // auth   
 

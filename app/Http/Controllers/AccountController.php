@@ -30,14 +30,11 @@ class AccountController extends Controller
         } else {
             //To create the user account
 
-            $phonenum = trim(Input::get('phonenum'));
-            $res_phonenum = "(".substr($phonenum, 0, 3).") ".substr($phonenum, 3, 3)."-".substr($phonenum,6);
-
             $newUser = new User;
             $newUser->email = trim(Input::get('email')); 
             $newUser->password = Hash::make(Input::get('email'));
             $newUser->name = trim(Input::get('name'));
-            $newUser->phonenum = $res_phonenum;
+            $newUser->phonenum = trim(Input::get('phonenum'));
             $newUser->profileUrl = trim(Input::get('profileUrl'));
             $newUser->imageUrl = trim(Input::get('imageUrl'));
             $newUser->save();
@@ -141,5 +138,26 @@ class AccountController extends Controller
                 ];
 
         return response()->api($data);
+    }
+
+    public function apiUpdateUser(Request $request){
+
+        $user = User::find(Auth::user()->id);
+        $user->email = trim(Input::get('email')); 
+        $user->password = Hash::make(Input::get('email'));
+        $user->name = trim(Input::get('name'));
+        $user->phonenum = trim(Input::get('phonenum'));
+        $user->profileUrl = trim(Input::get('profileUrl'));
+        $user->imageUrl = trim(Input::get('imageUrl'));
+        $user->save();
+
+        $inputs = array(
+            'email'      => Input::get('email'),
+            'password'  => Input::get('email')
+        );
+
+        Auth::attempt($inputs);
+                return response()
+                        ->api(compact('token')); 
     }
 }

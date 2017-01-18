@@ -32,8 +32,9 @@ Route::group(['prefix' => 'api'], function() {
 
     Route::group(['prefix' => 'trip'],function(){
         Route::post('register_trip', 'TripsController@store');
-        Route::get('get_drive_trips', 'TripsController@getDriveTrips');
-        Route::post('get_driver', 'TripsController@getDriver');
+        Route::post('get_trips', 'TripsController@getTrips');
+        Route::post('get_trip_details', 'TripsController@getTripDetails');
+        Route::get('get_history', 'TripsController@getHistory');
     });
 });
 

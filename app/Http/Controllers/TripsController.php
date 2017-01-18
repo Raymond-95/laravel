@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Trip;
 use App\User;
+use App\Triprequest;
 use Auth;
 
 class TripsController extends Controller
@@ -65,10 +66,10 @@ class TripsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function getDriveTrips()
+    public function getTrips(Request $request)
     {
-        $where = ['status' => 'available', 'role' => 'driver'];
-        $trips = Trip::where($where)->get();
+        $where = ['status' => 'available', 'role' => $request->role];
+        $trips = Trip::where($where)->orderBy('date')->get();
 
         $response = [];
         foreach ($trips as $trip) {
@@ -92,7 +93,7 @@ class TripsController extends Controller
             ->api($response);
     }
 
-    public function getDriver(Request $request)
+    public function getTripDetails(Request $request)
     {
         $trip = Trip::find($request->id);
 
@@ -109,6 +110,59 @@ class TripsController extends Controller
                 'imageUrl' => $trip->user->imageUrl
             ];
         
+
+        return response()
+            ->api($response);
+    }
+
+    public function getHistory()
+    {
+        $user_id = Auth::user()->id;
+
+        $where = ['requested_by' => $user_id];
+        $requested_trips = Triprequest::where($where)->get();
+
+        $tripId = array();
+        foreach ($requested_trips as $requested_trip) {
+
+           array_push($tripId, $requested_trip->trip_id);
+        }
+
+        $trips = Trip::where('user_id', '=', $user_id)->get();
+
+        foreach ($trips as $trip) {
+
+            array_push($tripId, $trip->id);
+        }
+
+        $response = [];
+        $user = User::find(Auth::user()->id);
+        $size = count($tripId);
+        for ($i = 0; $i < $size; $i++) {
+
+            $temp_trip = Trip::where('id', '=', $tripId[$i])->get();
+
+            foreach ($temp_trip as $trip) {
+
+                $response[] = [
+
+                    'id' => $trip->id,
+                    'source' => $trip->source,
+                    'destination' => $trip->destination,
+                    'date'  => $trip->date,
+                    'time'  => $trip->time,
+                    'information'  => $trip->information,
+                    'role' => $trip->role,
+                    'user_id' => $trip->user_id,
+                    'name' => $trip->user->name,
+                    'imageUrl' => $trip->user->imageUrl
+                ];
+            }
+        }
+
+        $response = array_values(array_sort($response, function ($value) {
+                return $value['date'];
+        }));
 
         return response()
             ->api($response);

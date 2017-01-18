@@ -4,8 +4,6 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-use Carbon;
-
 class Trip extends Model
 {
 
@@ -13,4 +11,10 @@ class Trip extends Model
 	{
 		return $this->belongsTo(User::class);
 	}
+
+	// public function users()
+ //    {
+ //        return $this->belongsToMany('App\Users', 'Triprequest', 
+ //          'trip_id', 'user_id');
+ //    }
 }

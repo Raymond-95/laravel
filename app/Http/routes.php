@@ -32,6 +32,7 @@ Route::group(['prefix' => 'api'], function() {
 
     Route::group(['prefix' => 'trip'],function(){
         Route::post('register_trip', 'TripsController@store');
+        Route::post('update_trip/{id}', 'TripsController@updateTrip');
         Route::post('get_trips', 'TripsController@getTrips');
         Route::post('get_trip_details', 'TripsController@getTripDetails');
         Route::get('get_history', 'TripsController@getHistory');

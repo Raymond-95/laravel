@@ -99,12 +99,14 @@ class TripsController extends Controller
 
             $response = [
 
+                'id' => $trip->id,
                 'source' => $trip->source,
                 'destination' => $trip->destination,
                 'date'  => $trip->date,
                 'time'  => $trip->time,
                 'information'  => $trip->information,
                 'role' => $trip->role,
+                'status' => $trip->status,
                 'user_id' => $trip->user_id,
                 'name' => $trip->user->name,
                 'imageUrl' => $trip->user->imageUrl
@@ -186,9 +188,26 @@ class TripsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function updateTrip(Request $request, $id)
     {
-        //
+        $trip =  Trip::where('id', '=', $id)->first();
+
+        $trip->source = $request->source;
+        $trip->destination = $request->destination;
+
+        $date = strtotime($request->date);
+        $trip->date = date('Y-m-d',$date);
+
+        $time = strtotime($request->time);
+        $trip->time = date('H:i', $time);
+
+        $trip->role = $request->role;
+        $trip->information = $request->information;
+
+        $trip->save();
+
+            return response()
+            ->api($trip);
     }
 
     /**

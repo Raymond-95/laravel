@@ -26,8 +26,6 @@ class CreateTripsTable extends Migration
 
             $table->timestamp('created_at')->nullableTimestamps();
             $table->timestamp('updated_at')->nullable();
-            $table->integer('requested_by')->unsigned();
-            $table->timestamp('approved_at')->nullable();
             $table->string('status')->default("available");
             $table->timestamp('departed_at')->nullable();
             $table->timestamp('ended_at')->nullable();

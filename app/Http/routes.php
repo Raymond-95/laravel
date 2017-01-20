@@ -38,6 +38,11 @@ Route::group(['prefix' => 'api'], function() {
         Route::post('get_trip_details', 'TripsController@getTripDetails');
         Route::get('get_history', 'TripsController@getHistory');
     });
+
+    Route::group(['prefix' => 'friend'],function(){
+        Route::post('verify_user', 'FriendsController@getVerifiedUser');
+        Route::post('add_friend', 'FriendsController@addFriend');
+    });
 });
 
 

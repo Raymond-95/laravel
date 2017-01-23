@@ -28,6 +28,7 @@ Route::group(['prefix' => 'api'], function() {
         Route::get('me', 'AccountController@apiGetAccount');
         Route::post('get_user', 'AccountController@apiGetUser');
         Route::post('update_user', 'AccountController@apiUpdateUser');
+        Route::post('verify_license', 'AccountController@verifyLicense');
     }); // accounts
 //}); // auth   
 
@@ -40,8 +41,14 @@ Route::group(['prefix' => 'api'], function() {
     });
 
     Route::group(['prefix' => 'friend'],function(){
-        Route::post('verify_user', 'FriendsController@getVerifiedUser');
+        //Route::post('verify_user', 'FriendsController@getVerifiedUser');
         Route::post('add_friend', 'FriendsController@addFriend');
+    });
+
+    Route::group(['prefix' => 'notification'],function(){
+        Route::post('store_token', 'NotificationsController@storeToken');
+        Route::post('update_token', 'NotificationsController@updateToken');
+        Route::post('send_notification', 'NotificationsController@send_notification');
     });
 });
 

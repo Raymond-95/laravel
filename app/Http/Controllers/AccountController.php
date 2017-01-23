@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Exceptions\JWTException;
 
-use Input, Validator, Auth, JWTAuth, Hash;
+use Input, Validator, Auth, JWTAuth, Hash, Redirect;
 
 use App\User;
 
@@ -160,4 +160,12 @@ class AccountController extends Controller
                 return response()
                         ->api(compact('token')); 
     }
+
+
+    // public function verifyLicense(Request $request){
+
+    //     return  Redirect::away('http://www.jpj.gov.my/web/guest/tarikh-luput-lesen-memandu')->withInputs(Input::all());
+
+    // }
+
 }

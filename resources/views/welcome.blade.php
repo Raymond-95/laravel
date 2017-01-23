@@ -4,38 +4,14 @@
 
         <link href='//fonts.googleapis.com/css?family=Lato:100' rel='stylesheet' type='text/css'>
 
-        <style>
-            body {
-                margin: 0;
-                padding: 0;
-                width: 100%;
-                height: 100%;
-                color: #B0BEC5;
-                display: table;
-                font-weight: 100;
-                font-family: 'Lato';
-            }
+        <script type="text/javascript">
+            
+           var a="http://www.jpj.gov.my/web/guest/tarikh-luput-lesen-memandu?p_p_id=jpjdrivinglicense_WAR_jpjallportlet_INSTANCE_Ux42&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_resource_id=getDataResourceURL&p_p_cacheability=cacheLevelPage&p_p_col_id=column-2&p_p_col_count=5&_jpjdrivinglicense_WAR_jpjallportlet_INSTANCE_Ux42_jspPage=%2Fview.jsp";
 
-            .container {
-                text-align: center;
-                display: table-cell;
-                vertical-align: middle;
-            }
 
-            .content {
-                text-align: center;
-                display: inline-block;
-            }
+           $.post(a,{action:"check",idNum:"950703025239",categoryId:"1"}}
 
-            .title {
-                font-size: 96px;
-                margin-bottom: 40px;
-            }
-
-            .quote {
-                font-size: 24px;
-            }
-        </style>
+        </script>
     </head>
     <body>
         <div class="container">

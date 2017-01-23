@@ -146,6 +146,7 @@ return [
 
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
         App\Providers\ResponseMacroServiceProvider::class,
+        Davibennun\LaravelPushNotification\LaravelPushNotificationServiceProvider::class,  
 
     ],
 
@@ -198,6 +199,7 @@ return [
         'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
         'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
         'Input' => Illuminate\Support\Facades\Input::class,
+        'PushNotification' => Davibennun\LaravelPushNotification\Facades\PushNotification::class,  
     ],
 
 ];

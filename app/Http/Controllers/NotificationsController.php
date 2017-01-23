@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use Input, Auth, JWTAuth;
 use App\User;
 use App\Fcm;
+use App\Trip;
 
 class NotificationsController extends Controller
 {
@@ -36,13 +37,12 @@ class NotificationsController extends Controller
         return response()->api(['message' => 'Update token successfully']);
     }
 
-    public function sendNotification(Request $request)
+    public function sendNotification($id, $requestTitle, $requestMsg)
     {
-        $user = User::find(Auth::user()->id);
-        $target =  Fcm::where('user_id', '=', $request->user_id)->first();
+        $target =  Fcm::where('user_id', '=', $id)->first();
 
-        $title = 'Tee Yong Ching';
-        $message = 'I am a big head';
+        $title = $requestTitle;
+        $message = $requestMsg;
         $path_to_fcm = 'https://fcm.googleapis.com/fcm/send';
         $server_key = 'AIzaSyDtxjf0MagAdbElfJ9bkZaH7DfqsFHTHmw';
         $device_token = $target->token;
@@ -52,16 +52,10 @@ class NotificationsController extends Controller
                     'Content-Type:application/json'
                     );
 
-        $msg = array
-        (
-            'title'     => $title,
-            'body'   => $message
-        );
-
         $fields = array
         (
             'to'  => $device_token,
-            'notification' => $msg
+            'notification' => array('body'=>$message, 'title'=>$title)
         );
 
         $payload = json_encode($fields);
@@ -78,6 +72,16 @@ class NotificationsController extends Controller
         $result = curl_exec($curl_session);
 
         curl_close($curl_session);
+    }
+
+    public function sendTripRequest(Request $request){
+
+        $trip =  Trip::where('id', '=', $request->id)->first();
+        $user =  User::where('id', '=', $trip->user_id)->first();
+
+        $message = 'Hi, I would like to take a ride with you.';
+
+        $this->sendNotification($trip->user_id, $user->name, $message);
     }
 }
 

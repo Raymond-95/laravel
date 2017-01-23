@@ -41,14 +41,14 @@ Route::group(['prefix' => 'api'], function() {
     });
 
     Route::group(['prefix' => 'friend'],function(){
-        //Route::post('verify_user', 'FriendsController@getVerifiedUser');
+        Route::post('verify_user', 'FriendsController@getVerifiedUser');
         Route::post('add_friend', 'FriendsController@addFriend');
     });
 
     Route::group(['prefix' => 'notification'],function(){
         Route::post('store_token', 'NotificationsController@storeToken');
         Route::post('update_token', 'NotificationsController@updateToken');
-        Route::post('send_notification', 'NotificationsController@send_notification');
+        Route::post('send_trip_request', 'NotificationsController@sendTripRequest');
     });
 });
 

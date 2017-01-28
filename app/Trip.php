@@ -12,6 +12,11 @@ class Trip extends Model
 		return $this->belongsTo(User::class);
 	}
 
+	public function triprequest()
+    {
+        return $this->hasMany(Triprequest::class);
+    }
+
 	// public function users()
  //    {
  //        return $this->belongsToMany('App\Users', 'Triprequest', 

@@ -17,11 +17,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasMany(Trip::class);
     }
 
-    // public function trips()
-    // {
-    //     return $this->belongsToMany('App\Trips', 'Triprequest', 
-    //       'user_id', 'trip_id');
-    // }
+    public function triprequest()
+    {
+        return $this->hasMany(Triprequest::class);
+    }
     
 
     /**

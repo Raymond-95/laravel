@@ -10,13 +10,15 @@ use Input, Auth, JWTAuth;
 use App\User;
 use App\Fcm;
 use App\Trip;
+use App\Triprequest;
 
 class NotificationsController extends Controller
 {
    
-   public function storeToken(){
+   public function storeToken(Request $request){
 
-        $user = User::find(Auth::user()->id);
+        $where = ['email' => $request->email];
+        $user = User::where($where)->first();
 
         $newFcm = new Fcm;
         $newFcm->user_id = $user->id;
@@ -81,7 +83,36 @@ class NotificationsController extends Controller
 
         $message = 'Hi, I would like to take a ride with you.';
 
-        $this->sendNotification($trip->user_id, $user->name, $message);
+        $this->sendNotification($user->id, $user->name, $message);
+    }
+
+    public function getNotifications(){
+
+        $user = User::find(Auth::user()->id);
+
+        $where = ['user_id' => $user->id];
+        $triprequests = Triprequest::where($where)->get();
+
+        $response = [];
+
+        foreach ($triprequests as $triprequest) {
+
+            $user = User::find($triprequest->requested_by);
+
+            $response[] = [
+
+                'id' => $triprequest->id,
+                'requested_by' => $triprequest->requested_by,
+                'trip_id' => $triprequest->trip_id,
+                'name' => $user->name,
+                'imageUrl' => $user->imageUrl,
+                'status' => $triprequest->status,
+                'source' => $triprequest->trip->source,
+                'destination' => $triprequest->trip->destination
+            ];
+        }
+
+        return response()->api($response);
     }
 }
 

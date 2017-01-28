@@ -44,6 +44,29 @@ class AccountController extends Controller
         return response()->api(['message' => 'Signup successfully']);
     }
 
+    public function verifyUserAcc(){
+
+        $email = Input::get('email');
+
+        $where = ['email' => $email];
+        $user = User::where($where)->first();
+
+        $check = 'true';
+
+        if (!empty($user)){
+            $check = 'true';
+        }
+        else{
+            $check = 'false';
+        }
+
+        $response = [
+            'check' => $check
+        ];
+
+        return response()->api($response);
+    }
+
     public function apiPostLogin() {
 
         $field = filter_var(Input::get('email'), FILTER_VALIDATE_EMAIL) ? 'email':
@@ -73,7 +96,6 @@ class AccountController extends Controller
                 return response()
                         ->api(compact('token')); 
             }
-            // }
 
         } catch(JWTException $e) {
             return response()

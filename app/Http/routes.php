@@ -18,8 +18,9 @@ Route::get('/', function () {
 Route::group(['prefix' => 'api'], function() {
 	Route::group(['prefix' => 'accounts'],function(){
 	    Route::post('signup','AccountController@apiPostSignUp');
+        Route::post('get_existing_user', 'AccountController@verifyUserAcc');
 	    Route::post('login','AccountController@apiPostLogin');
-	     Route::post('logout', 'AccountController@apiPostLogout');
+	   Route::post('logout', 'AccountController@apiPostLogout');
 	});
 
 //Route::group(['middleware' => 'jwt.auth'], function() {
@@ -38,17 +39,15 @@ Route::group(['prefix' => 'api'], function() {
         Route::post('get_trips', 'TripsController@getTrips');
         Route::post('get_trip_details', 'TripsController@getTripDetails');
         Route::get('get_history', 'TripsController@getHistory');
-    });
-
-    Route::group(['prefix' => 'friend'],function(){
-        Route::post('verify_user', 'FriendsController@getVerifiedUser');
-        Route::post('add_friend', 'FriendsController@addFriend');
+        Route::post('update_trip_request/{id}', 'TripsController@updateTripRequest');
     });
 
     Route::group(['prefix' => 'notification'],function(){
         Route::post('store_token', 'NotificationsController@storeToken');
         Route::post('update_token', 'NotificationsController@updateToken');
         Route::post('send_trip_request', 'NotificationsController@sendTripRequest');
+        Route::post('store_notification', 'NotificationsController@storeNotification');
+        Route::get('get_notifications', 'NotificationsController@getNotifications');
     });
 });
 

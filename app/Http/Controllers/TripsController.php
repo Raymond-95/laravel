@@ -9,7 +9,6 @@ use App\Http\Controllers\Controller;
 use App\Trip;
 use App\User;
 use App\Triprequest;
-use App\Http\Controllers\NotificationsController;
 use Auth;
 
 class TripsController extends Controller
@@ -120,7 +119,6 @@ class TripsController extends Controller
         }
 
         $response = [];
-        $user = User::find(Auth::user()->id);
         $size = count($tripId);
         for ($i = 0; $i < $size; $i++) {
 
@@ -153,17 +151,6 @@ class TripsController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -189,17 +176,33 @@ class TripsController extends Controller
         $trip->save();
 
             return response()
-            ->api($trip);
+            ->api("Trip is updated.");
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function updateTripRequest(Request $request, $id)
     {
-        //
+        $triprequest =  Triprequest::where('id', '=', $id)->first();
+        $user_id = Auth::user()->id;
+
+        $triprequest->trip_id = $request->trip_id;
+        $triprequest->user_id = $user_id;
+        $triprequest->requested_by = $request->requested_by;
+        $triprequest->status = $request->status;
+        $triprequest->save();
+
+
+        $trip = Trip::where('id', $request->trip_id)->first();
+
+        $trip->source = $trip->source;
+        $trip->destination = $trip->destination;
+        $trip->date =  $trip->date;
+        $trip->time = $trip->time;
+        $trip->role = $trip->role;
+        $trip->information = $trip->information;
+        $trip->status = $request->trip_status;
+        $trip->save();
+
+        return response()
+        ->api("Trip request is updated.");
     }
 }

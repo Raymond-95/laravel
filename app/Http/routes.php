@@ -49,6 +49,11 @@ Route::group(['prefix' => 'api'], function() {
         Route::post('store_notification', 'NotificationsController@storeNotification');
         Route::get('get_notifications', 'NotificationsController@getNotifications');
     });
+
+    Route::group(['prefix' => 'chat'],function(){
+        Route::post('send_message', 'ChatsController@storeMessage');
+        Route::post('get_message', 'ChatsController@getMessage');
+    });
 });
 
 

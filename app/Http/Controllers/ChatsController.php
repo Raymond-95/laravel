@@ -6,82 +6,46 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Chat;
+use Auth;
 
 class ChatsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
+
+    public function storeMessage(Request $request){
+        $user_id = Auth::user()->id;
+        $chat = new Chat;
+
+        $id = $request->id;
+
+        $chat->sender = $user_id;
+        $chat->recipient = $id;
+        $chat->message = $request->message;
+
+        $chat->save();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+    public function getMessage(Request $request){
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        $user_id = Auth::user()->id;
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+        $where = ['sender' => $user_id, 'recipient' => $request->id];
+        $orWhere = ['sender' => $request->id, 'recipient' => $user_id];
+        $messages = Chat::where($where)->orWhere($orWhere)->get();
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+        $response = [];
+        foreach ($messages as $message) {
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+            $response[] = [
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+                'id' => $message->id,
+                'sender' => $message->sender,
+                'recipient' => $message->recipient,
+                'message' => $message->message
+            ];
+        }
+
+        return response()
+            ->api($response);
     }
 }

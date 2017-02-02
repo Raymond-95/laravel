@@ -184,10 +184,18 @@ class AccountController extends Controller
     }
 
 
-    // public function verifyLicense(Request $request){
+    public function verifyLicense_get(){
 
-    //     return  Redirect::away('http://www.jpj.gov.my/web/guest/tarikh-luput-lesen-memandu')->withInputs(Input::all());
+        //return  Redirect::away('http://www.jpj.gov.my/web/guest/tarikh-luput-lesen-memandu')->withInputs(Input::all());
 
-    // }
+        // $url = file_get_contents('http://www.jpj.gov.my/web/guest/tarikh-luput-lesen-memandu');
+
+        // return $url;
+        //return file_get_contents('http://www.jpj.gov.my/web/guest/tarikh-luput-lesen-memandu', compact('captch'));
+
+       return view('LicenseVerification');
+
+
+    }
 
 }

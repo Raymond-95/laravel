@@ -1,4 +1,23 @@
 <html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function (){
+
+
+
+        $.ajax({
+            url: 'http://www.jpj.gov.my/web/guest/tarikh-luput-lesen-memandu',  //Pass URL here 
+            type: "GET", //Also use GET method
+            success: function(data) {
+                var time = $(data).find('.captcha').html();
+                alert(time);
+            }
+        });
+
+
+});
+
+</script>
     <head>
         <title>Laravel</title>
 

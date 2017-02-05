@@ -14,19 +14,26 @@ class CreateTripsTable extends Migration
     {
         Schema::create('trips', function (Blueprint $table) {
             $table->increments('id');
+
             $table->string('source')->default(null);
+            $table->float('source_lat', 10,6)->default(0);
+            $table->float('source_lng', 10,6)->default(0);
+
             $table->string('destination')->default(null);
+            $table->float('destination_lat', 10,6)->default(0);
+            $table->float('destination_lng', 10,6)->default(0);
+            
             $table->date('date')->nullable();
             $table->time('time')->nullable();
             $table->string('information', 150)->default(null);
-            $table->string('role')->default(null);
+            $table->string('role', 9)->default("passenger");
 
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->timestamp('created_at')->nullableTimestamps();
             $table->timestamp('updated_at')->nullable();
-            $table->string('status')->default("available");
+            $table->string('status', 20)->default("available");
             $table->timestamp('departed_at')->nullable();
             $table->timestamp('ended_at')->nullable();
             $table->string('guardian')->default(null);

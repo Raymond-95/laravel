@@ -16,22 +16,17 @@ Route::get('/', function () {
 });
 
 Route::group(['prefix' => 'api'], function() {
-	Route::group(['prefix' => 'accounts'],function(){
-	    Route::post('signup','AccountController@apiPostSignUp');
-        Route::post('get_existing_user', 'AccountController@verifyUserAcc');
-	    Route::post('login','AccountController@apiPostLogin');
-	   Route::post('logout', 'AccountController@apiPostLogout');
-	});
-
-//Route::group(['middleware' => 'jwt.auth'], function() {
 
     Route::group(['prefix' => 'accounts'],function(){
+        Route::post('signup','AccountController@apiPostSignUp');
+        Route::post('get_existing_user', 'AccountController@verifyUserAcc');
+        Route::post('login','AccountController@apiPostLogin');
+        Route::post('logout', 'AccountController@apiPostLogout');
         Route::get('me', 'AccountController@apiGetAccount');
         Route::post('get_user', 'AccountController@apiGetUser');
         Route::post('update_user', 'AccountController@apiUpdateUser');
-        Route::get('verify_license', 'AccountController@verifyLicense_get');
-    }); // accounts
-//}); // auth   
+        Route::post('update_role', 'AccountController@apiUpdateRole');
+    }); 
 
     Route::group(['prefix' => 'trip'],function(){
         Route::post('register_trip', 'TripsController@store');
@@ -40,6 +35,7 @@ Route::group(['prefix' => 'api'], function() {
         Route::post('get_trip_details', 'TripsController@getTripDetails');
         Route::get('get_history', 'TripsController@getHistory');
         Route::post('update_trip_request/{id}', 'TripsController@updateTripRequest');
+        Route::post('search', 'SearchController@search');
     });
 
     Route::group(['prefix' => 'notification'],function(){
@@ -53,6 +49,7 @@ Route::group(['prefix' => 'api'], function() {
     Route::group(['prefix' => 'chat'],function(){
         Route::post('send_message', 'ChatsController@storeMessage');
         Route::post('get_message', 'ChatsController@getMessage');
+        Route::get('get_chat_users', 'ChatsController@getChatUsers');
     });
 });
 

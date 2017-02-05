@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('phonenum', 10)->default(null);
             $table->string('profileUrl')->default(null);
             $table->string('imageUrl')->default(null);
+            $table->string('role')->default("passenger");
             $table->rememberToken();
             $table->timestamps();
         });

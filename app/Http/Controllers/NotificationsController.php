@@ -79,11 +79,20 @@ class NotificationsController extends Controller
     public function sendTripRequest(Request $request){
 
         $trip =  Trip::where('id', '=', $request->id)->first();
-        $user =  User::where('id', '=', $trip->user_id)->first();
+        $sender = User::find(Auth::user()->id);
+        $recipient =  User::where('id', '=', $trip->user_id)->first();
 
         $message = 'Hi, I would like to take a ride with you.';
 
-        $this->sendNotification($user->id, $user->name, $message);
+        $this->sendNotification($recipient->id, $sender->name, $message);
+
+        $triprequest = new Triprequest;
+
+        $triprequest->trip_id = $trip->id;
+        $triprequest->user_id = $trip->user_id;
+        $triprequest->requested_by = $sender->id;
+
+        $triprequest->save();
     }
 
     public function getNotifications(){

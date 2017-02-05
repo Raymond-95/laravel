@@ -9,10 +9,20 @@ use App\Http\Controllers\Controller;
 use App\Trip;
 use App\User;
 use App\Triprequest;
-use Auth;
+use Auth, View, Redirect, Input;
 
 class TripsController extends Controller
 {
+    public function getCoordinate($location){
+        $address = $location; // Google HQ
+        $prepAddr = str_replace(' ','+',$address);
+        $geocode=file_get_contents('https://maps.google.com/maps/api/geocode/json?address='.$prepAddr.'&sensor=false');
+        $output= json_decode($geocode);
+        $latitude = $output->results[0]->geometry->location->lat;
+        $longitude = $output->results[0]->geometry->location->lng;
+
+        return [$latitude, $longitude];  
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -26,7 +36,14 @@ class TripsController extends Controller
         $trip = new Trip;
 
         $trip->source = $request->source;
+        $geocoordinate = $this->getCoordinate($request->source);
+        $trip->source_lat = $geocoordinate[0];
+        $trip->source_lng = $geocoordinate[1];
+
         $trip->destination = $request->destination;
+        $geocoordinate = $this->getCoordinate($request->destination);
+        $trip->destination_lat = $geocoordinate[0];
+        $trip->destination_lng = $geocoordinate[1];
 
         $date = strtotime($request->date);
         $trip->date = date('Y-m-d',$date);
@@ -78,6 +95,16 @@ class TripsController extends Controller
     {
         $trip = Trip::find($request->id);
 
+        $where = ['trip_id' => $request->id, 'requested_by' => Auth::user()->id] ;
+        $requested_trip = Triprequest::where($where)->first();
+
+        if (!empty($requested_trip)){
+            $status = $requested_trip->status;
+        }
+        else{
+            $status = $trip->status;
+        }
+
             $response = [
 
                 'id' => $trip->id,
@@ -87,7 +114,7 @@ class TripsController extends Controller
                 'time'  => $trip->time,
                 'information'  => $trip->information,
                 'role' => $trip->role,
-                'status' => $trip->status,
+                'status' => $status,
                 'user_id' => $trip->user_id,
                 'name' => $trip->user->name,
                 'imageUrl' => $trip->user->imageUrl

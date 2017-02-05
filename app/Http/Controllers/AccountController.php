@@ -126,6 +126,7 @@ class AccountController extends Controller
                     'phonenum' => $user->phonenum,
                     'profileUrl' => $user->profileUrl,
                     'imageUrl' => $user->imageUrl,
+                    'role' => $user->role,
                     'token' => $t
                 ];
 
@@ -156,7 +157,8 @@ class AccountController extends Controller
                     'name' => $user->name,
                     'phonenum' => $user->phonenum,
                     'profileUrl' => $user->profileUrl,
-                    'imageUrl' => $user->imageUrl
+                    'imageUrl' => $user->imageUrl,
+                    'role' => $user->role
                 ];
 
         return response()->api($data);
@@ -184,18 +186,18 @@ class AccountController extends Controller
     }
 
 
-    public function verifyLicense_get(){
+    public function apiUpdateRole(){
 
-        //return  Redirect::away('http://www.jpj.gov.my/web/guest/tarikh-luput-lesen-memandu')->withInputs(Input::all());
+        $user = User::find(Auth::user()->id);
 
-        // $url = file_get_contents('http://www.jpj.gov.my/web/guest/tarikh-luput-lesen-memandu');
-
-        // return $url;
-        //return file_get_contents('http://www.jpj.gov.my/web/guest/tarikh-luput-lesen-memandu', compact('captch'));
-
-       return view('LicenseVerification');
-
-
+        $user->email = $user->email;
+        $user->password =  $user->password;
+        $user->name = $user->name;
+        $user->phonenum = $user->phonenum;
+        $user->profileUrl = $user->profileUrl;
+        $user->imageUrl = $user->imageUrl;
+        $user->role = 'driver';
+        $user->save();
     }
 
 }

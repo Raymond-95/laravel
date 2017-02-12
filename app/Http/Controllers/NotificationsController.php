@@ -11,6 +11,7 @@ use App\User;
 use App\Fcm;
 use App\Trip;
 use App\Triprequest;
+use App\Guardian;
 
 class NotificationsController extends Controller
 {
@@ -76,23 +77,38 @@ class NotificationsController extends Controller
         curl_close($curl_session);
     }
 
-    public function sendTripRequest(Request $request){
+    public function sendRequest(Request $request){
 
         $trip =  Trip::where('id', '=', $request->id)->first();
         $sender = User::find(Auth::user()->id);
         $recipient =  User::where('id', '=', $trip->user_id)->first();
 
-        $message = 'Hi, I would like to take a ride with you.';
+        if ($request->type == 'triprequest'){
+            $message = 'Hi, I would like to take a ride with you.';
 
-        $this->sendNotification($recipient->id, $sender->name, $message);
+            $this->sendNotification($recipient->id, $sender->name, $message);
 
-        $triprequest = new Triprequest;
+            $triprequest = new Triprequest;
 
-        $triprequest->trip_id = $trip->id;
-        $triprequest->user_id = $trip->user_id;
-        $triprequest->requested_by = $sender->id;
+            $triprequest->trip_id = $trip->id;
+            $triprequest->user_id = $trip->user_id;
+            $triprequest->requested_by = $sender->id;
 
-        $triprequest->save();
+            $triprequest->save();
+        }
+        else{
+            $message = 'My angle, please protect me from the dangers.';
+
+            $this->sendNotification($recipient->id, $sender->name, $message);
+
+            $guardian = new Guardian;
+
+            $guardian->trip_id = $trip->id;
+            $guardian->requested_by = $sender->id;
+            $guardian->guardian = $recipient->id;
+
+            $guardian->save();
+        }
     }
 
     public function getNotifications(){
@@ -117,9 +133,36 @@ class NotificationsController extends Controller
                 'imageUrl' => $user->imageUrl,
                 'status' => $triprequest->status,
                 'source' => $triprequest->trip->source,
-                'destination' => $triprequest->trip->destination
+                'destination' => $triprequest->trip->destination,
+                'type' => 'triprequest',
+                'created_at' => $triprequest->created_at
             ];
         }
+
+
+        $where = ['requested_by' => $user->id];
+        $guardians = Guardian::where($where)->get();
+
+        foreach ($guardians as $guardian) {
+
+            $user = User::find($guardian->requested_by);
+
+            $response[] = [
+
+                'id' => $guardian->id,
+                'requested_by' => $guardian->requested_by,
+                'trip_id' => $guardian->trip_id,
+                'name' => $user->name,
+                'imageUrl' => $user->imageUrl,
+                'status' => $guardian->status,
+                'source' => $guardian->trip->source,
+                'destination' => $guardian->trip->destination,
+                'type' => 'guardian',
+                'created_at' => $guardian->created_at
+            ];
+        }
+
+        collect($response)->sortBy('created_at');
 
         return response()->api($response);
     }

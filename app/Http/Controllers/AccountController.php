@@ -164,6 +164,24 @@ class AccountController extends Controller
         return response()->api($data);
     }
 
+    public function apiGetUsers(){
+
+         $where = ['id', '!=' , Auth::user()->id];
+        $requested_trips = Triprequest::where($where)->get();
+
+        $data = [
+                    'id' => $user->id,
+                    'email' => $user->email,
+                    'name' => $user->name,
+                    'phonenum' => $user->phonenum,
+                    'profileUrl' => $user->profileUrl,
+                    'imageUrl' => $user->imageUrl,
+                    'role' => $user->role
+                ];
+
+        return response()->api($data);
+    }
+
     public function apiUpdateUser(Request $request){
 
         $user = User::find(Auth::user()->id);

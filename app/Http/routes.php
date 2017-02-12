@@ -41,8 +41,7 @@ Route::group(['prefix' => 'api'], function() {
     Route::group(['prefix' => 'notification'],function(){
         Route::post('store_token', 'NotificationsController@storeToken');
         Route::post('update_token', 'NotificationsController@updateToken');
-        Route::post('send_trip_request', 'NotificationsController@sendTripRequest');
-        Route::post('store_notification', 'NotificationsController@storeNotification');
+        Route::post('send_request', 'NotificationsController@sendRequest');
         Route::get('get_notifications', 'NotificationsController@getNotifications');
     });
 
@@ -50,6 +49,11 @@ Route::group(['prefix' => 'api'], function() {
         Route::post('send_message', 'ChatsController@storeMessage');
         Route::post('get_message', 'ChatsController@getMessage');
         Route::get('get_chat_users', 'ChatsController@getChatUsers');
+    });
+
+    Route::group(['prefix' => 'guardian'],function(){
+        Route::post('update_guardian/{id}', 'GuardiansController@updateGuardian');
+        Route::get('get_guardians', 'GuardiansController@getGuardians');
     });
 });
 

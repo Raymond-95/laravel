@@ -17,9 +17,8 @@ class Trip extends Model
         return $this->hasMany(Triprequest::class);
     }
 
-	// public function users()
- //    {
- //        return $this->belongsToMany('App\Users', 'Triprequest', 
- //          'trip_id', 'user_id');
- //    }
+	public function guardian()
+    {
+        return $this->hasMany(Guardian::class);
+    }
 }

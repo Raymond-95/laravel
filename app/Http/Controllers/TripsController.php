@@ -130,28 +130,35 @@ class TripsController extends Controller
         $user_id = Auth::user()->id;
 
         $where = ['requested_by' => $user_id];
-        $requested_trips = Triprequest::where($where)->get();
+        $orWhere = ['user_id' => $user_id];
+        $requested_trips = Triprequest::where($where)->orWhere($orWhere)->get();
 
-        $tripId = array();
+        $tripInfos = [];
         foreach ($requested_trips as $requested_trip) {
 
-           array_push($tripId, $requested_trip->trip_id);
+           $tripInfos[] = [
+                    'id' => $requested_trip->trip_id,
+                    'status' => $requested_trip->status
+                    ];
         }
 
         $trips = Trip::where('user_id', '=', $user_id)->get();
 
         foreach ($trips as $trip) {
 
-            array_push($tripId, $trip->id);
+            $tripInfos[] = [
+                    'id' => $trip->id,
+                    'status' => $trip->status
+                    ];
         }
 
+        $tripInfos = collect($tripInfos)->unique('id');
+
         $response = [];
-        $size = count($tripId);
-        for ($i = 0; $i < $size; $i++) {
+        foreach ($tripInfos as $tripInfo) {
 
-            $temp_trip = Trip::where('id', '=', $tripId[$i])->get();
+            $trip = Trip::where('id', '=', $tripInfo['id'])->first();
 
-            foreach ($temp_trip as $trip) {
 
                 $response[] = [
 
@@ -164,9 +171,9 @@ class TripsController extends Controller
                     'role' => $trip->role,
                     'user_id' => $trip->user_id,
                     'name' => $trip->user->name,
-                    'imageUrl' => $trip->user->imageUrl
+                    'imageUrl' => $trip->user->imageUrl,
+                    'status' => $tripInfo['status']
                 ];
-            }
         }
 
         $response = array_values(array_sort($response, function ($value) {

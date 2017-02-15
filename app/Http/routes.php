@@ -36,6 +36,7 @@ Route::group(['prefix' => 'api'], function() {
         Route::get('get_history', 'TripsController@getHistory');
         Route::post('update_trip_request/{id}', 'TripsController@updateTripRequest');
         Route::post('search', 'SearchController@search');
+        Route::post('rating', 'TripsController@rating');
     });
 
     Route::group(['prefix' => 'notification'],function(){
@@ -43,6 +44,7 @@ Route::group(['prefix' => 'api'], function() {
         Route::post('update_token', 'NotificationsController@updateToken');
         Route::post('send_request', 'NotificationsController@sendRequest');
         Route::get('get_notifications', 'NotificationsController@getNotifications');
+        Route::post('alert_guardian', 'NotificationsController@alertGuardian');
     });
 
     Route::group(['prefix' => 'chat'],function(){

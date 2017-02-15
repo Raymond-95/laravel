@@ -26,8 +26,6 @@ class CreateGuardiansTable extends Migration
 
             $table->string('status')->default('pending');
 
-            $table->timestamp('departed_at')->nullable();
-            $table->timestamp('ended_at')->nullable();
             $table->timestamps();
         });
     }

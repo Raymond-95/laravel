@@ -8,6 +8,7 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use Input, Validator, Auth, JWTAuth, Hash, Redirect;
 
 use App\User;
+use App\Rate;
 
 class AccountController extends Controller
 {
@@ -150,6 +151,15 @@ class AccountController extends Controller
     public function apiGetUser(Request $request){
 
         $user = User::find($request->id);
+        $ratings =  Rate::where('rate_to', '=', $user->id)->get();
+
+        $sum = 0;
+        foreach ($ratings as $rating) {
+            
+            $sum = $rating->rate + $sum;
+        }
+
+        $average = $sum / count($sum);
 
         $data = [
                     'id' => $user->id,
@@ -158,7 +168,8 @@ class AccountController extends Controller
                     'phonenum' => $user->phonenum,
                     'profileUrl' => $user->profileUrl,
                     'imageUrl' => $user->imageUrl,
-                    'role' => $user->role
+                    'role' => $user->role,
+                    'rating' => $average
                 ];
 
         return response()->api($data);

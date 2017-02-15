@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Trip;
 use App\User;
 use App\Triprequest;
+use App\Rate;
 use Auth, View, Redirect, Input;
 
 class TripsController extends Controller
@@ -238,5 +239,35 @@ class TripsController extends Controller
 
         return response()
         ->api("Trip request is updated.");
+    }
+
+    public function rating(Request $request){
+
+        $user = User::find(Auth::user()->id);
+
+        $rate = new Rate;
+        $rate->rate = $request->rate;
+        $rate->rate_to = $request->rate_to;
+        $rate->rate_by = $user->id;
+        $rate->save();
+
+        $trip =  Trip::where('id', '=', $request->trip_id)->first();
+        $trip->source = $trip->source;
+        $trip->destination = $trip->destination;
+        $trip->date = $trip->date;
+        $trip->time = $trip->time;
+        $trip->role = $trip->role;
+        $trip->information = $trip->information;
+        $trip->status = 'completed';
+        $trip->save();
+
+        $triprequest =  Triprequest::where('trip_id', '=', $request->trip_id)->first();
+        $triprequest->user_id = $triprequest->user_id;
+        $triprequest->requested_by = $triprequest->requested_by;
+        $triprequest->status = 'completed';
+        $triprequest->save();
+
+        return response()
+        ->api("Rate user successfully.");
     }
 }

@@ -15,7 +15,7 @@ class CreateRatesTable extends Migration
         Schema::create('rates', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->Integer('rate');
+            $table->double('rate');
 
             $table->integer('rate_to')->unsigned();
             $table->foreign('rate_to')->references('id')->on('users')->onDelete('cascade');
@@ -23,7 +23,7 @@ class CreateRatesTable extends Migration
             $table->integer('rate_by')->unsigned();
             $table->foreign('rate_by')->references('id')->on('users')->onDelete('cascade');
 
-            $table->timestamp('created_at')->nullableTimestamps();
+            $table->timestamps();
         });
     }
 
